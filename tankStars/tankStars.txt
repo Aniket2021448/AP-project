@@ -1,0 +1,43 @@
+package com.mygdx.game;
+
+import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.ScreenUtils;
+import org.w3c.dom.Text;
+
+public class tankStars extends ApplicationAdapter {
+	SpriteBatch batch;
+	Texture tank1;
+	Texture tank2;
+	Texture background;
+	Texture ground;
+
+	@Override
+	public void create () {
+		batch = new SpriteBatch();
+		background = new Texture("gameBackground1.jpg");
+		tank1 = new Texture("chooseTank1.png");
+		tank2 = new Texture("chooseTank2.png");
+//		ground = new texture();
+	}
+
+	@Override
+	public void render () {
+		ScreenUtils.clear(1, 0, 0, 1);
+		batch.begin();
+		batch.draw(background,0,0);
+		batch.draw(tank1, 200, 150);
+		batch.draw(tank2, 800, 150);
+
+		batch.end();
+	}
+	
+	@Override
+	public void dispose () {
+		batch.dispose();
+		tank1.dispose();
+		tank2.dispose();
+		background.dispose();
+	}
+}

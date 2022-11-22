@@ -1,0 +1,9 @@
+background images:
+https://www.behance.net/gallery/65333621/Tank-Stars-Project?tracking_source=search_projects%7CTank+Stars
+
+SpriteSheets:
+<a href="https://www.freepik.com/free-vector/set-explosion_2611900.htm#query=Tank%20spritesheet&position=1&from_view=search&track=ais">Image by rawpixel.com</a> on Freepik
+
+for uiSkin
+https://github.com/libgdx/libgdx/blob/master/tests/gdx-tests-android/assets/data/uiskin.json
+
