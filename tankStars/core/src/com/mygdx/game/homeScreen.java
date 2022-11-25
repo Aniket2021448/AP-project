@@ -20,15 +20,17 @@ import java.util.concurrent.Callable;
 
 public class homeScreen implements Screen {
 
-    final tankStars game;
+    private final tankStars game;
     private Texture background;
     private TextureRegion backgroundTexture;
     private OrthographicCamera gameCam;
     private Viewport gamePort;
-    private Stage stage;
-    private Skin mySkin;
-    private Button startButton, resumeButton, exitButton;
-    private TextureAtlas atlas;
+    private Texture PLAY_ACTIVE_BUTTON;
+    private Texture PLAY_INACTIVE_BUTTON;
+    private Texture EXIT_ACTIVE_BUTTON;
+    private Texture EXIT_INACTIVE_BUTTON;
+    private Texture LOAD_ACTIVE_BUTTON;
+    private Texture LOAD_INACTIVE_BUTTON;
 
     public homeScreen(final tankStars game){
         this.game = game;
@@ -39,16 +41,13 @@ public class homeScreen implements Screen {
         gamePort = new FitViewport(Gdx.graphics.getWidth(),Gdx.graphics.getHeight(),gameCam);
         gameCam.position.set(((gamePort.getWorldWidth())/2),(gamePort.getWorldHeight()/2),0);
 
-        mySkin = new Skin(Gdx.files.internal("ui/uiskin.json"));
-        stage = new Stage(gamePort);
-        Gdx.input.setInputProcessor(stage);
+        PLAY_ACTIVE_BUTTON = new Texture(Gdx.files.internal("images/button_new-game.png"));
+        PLAY_INACTIVE_BUTTON = new Texture(Gdx.files.internal("images/button_new-game_DOWN.png"));
+        EXIT_ACTIVE_BUTTON = new Texture(Gdx.files.internal("images/button_exit-game.png"));
+        EXIT_INACTIVE_BUTTON = new Texture(Gdx.files.internal("images/button_exit-game_DOWN.png"));
+        LOAD_ACTIVE_BUTTON = new Texture(Gdx.files.internal("images/button_load-game.png"));
+        LOAD_INACTIVE_BUTTON = new Texture(Gdx.files.internal("images/button_load-game_DOWN.png"));
 
-        startButton = new TextButton("START GAME",mySkin, "small");
-        startButton.setSize(480, 240);
-        startButton.setPosition(Gdx.graphics.getWidth()/2 - startButton.getWidth(),500);
-
-
-        stage.addActor(startButton);
     }
 
     @Override
@@ -65,17 +64,42 @@ public class homeScreen implements Screen {
         game.batch.setProjectionMatrix(gameCam.combined);
         game.batch.begin();
         game.batch.draw(backgroundTexture, 0,0, 1920, 1080);
-        stage.act();
-        stage.draw();
 
-//        game.font.draw(game.batch, "SMASHHH SPACE TO BEGIN!!!!", 850, 200);
+        int playWidth, exitWidth,playHeight, exitHeight,loadWidth, loadHeight;
+        playWidth=loadWidth= exitWidth= 400;
+        playHeight= loadHeight=exitHeight = 100;
+
+        int playX = Gdx.graphics.getWidth()/2 - loadWidth/2;
+        int playY = 80;
+        int exitX = Gdx.graphics.getWidth() - 200 - exitWidth;
+        int exitY = 80;
+        int loadX = 200;
+        int loadY = 80;
+        game.batch.draw(PLAY_ACTIVE_BUTTON, playX,playY,playWidth,playHeight);
+        if (Gdx.input.getX() < playWidth+playX && Gdx.input.getX()>playX && Gdx.graphics.getHeight()-Gdx.input.getY() <  playY+playHeight && Gdx.graphics.getHeight()-Gdx.input.getY()>playY){
+            game.batch.draw(PLAY_INACTIVE_BUTTON, playX,playY,playWidth,playHeight);
+            if (Gdx.input.isTouched()){
+                game.setScreen(new chooseTank(game));
+            }
+        }
+
+        game.batch.draw(LOAD_ACTIVE_BUTTON, loadX,loadY,loadWidth,loadHeight);
+        if (Gdx.input.getX() < loadWidth+loadX && Gdx.input.getX()>loadX && Gdx.graphics.getHeight()-Gdx.input.getY() <  loadY+loadHeight && Gdx.graphics.getHeight()-Gdx.input.getY()>loadY){
+            game.batch.draw(LOAD_INACTIVE_BUTTON, loadX,loadY,loadWidth,loadHeight);
+            if (Gdx.input.isTouched()){
+                game.setScreen(new chooseTank(game));
+            }
+        }
+
+        game.batch.draw(EXIT_ACTIVE_BUTTON, exitX,exitY,exitWidth,exitHeight);
+        if (Gdx.input.getX() < exitWidth+exitX && Gdx.input.getX()>exitX && Gdx.graphics.getHeight()-Gdx.input.getY() <  playY+playHeight && Gdx.graphics.getHeight()-Gdx.input.getY()>playY){
+            game.batch.draw(EXIT_INACTIVE_BUTTON, exitX,exitY,exitWidth,exitHeight);
+            if (Gdx.input.isTouched()){
+                Gdx.app.exit();
+            }
+        }
 
         game.batch.end();
-
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            game.setScreen(new PlayScreens(game));
-            dispose();
-        }
     }
 
     @Override
@@ -101,11 +125,14 @@ public class homeScreen implements Screen {
 
     @Override
     public void dispose() {
-        stage.dispose();
-        mySkin.dispose();
+
         background.dispose();
         backgroundTexture.getTexture().dispose();
-        atlas.dispose();
+        PLAY_ACTIVE_BUTTON.dispose();
+        PLAY_INACTIVE_BUTTON.dispose();
+        EXIT_ACTIVE_BUTTON.dispose();
+        EXIT_INACTIVE_BUTTON.dispose();
 
     }
 }
+
