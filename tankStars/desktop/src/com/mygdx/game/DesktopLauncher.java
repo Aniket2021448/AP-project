@@ -12,6 +12,8 @@ public class DesktopLauncher {
 		Graphics.DisplayMode display = Lwjgl3ApplicationConfiguration. getDisplayMode();
 		config.setForegroundFPS(60);
 		config.setFullscreenMode(display);
+		config.setResizable(true);
+
 		config.useVsync(true);
 		config.setTitle("AP_Project_sem3");
 
