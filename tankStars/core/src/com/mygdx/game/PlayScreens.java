@@ -47,15 +47,22 @@ public class PlayScreens extends InputAdapter implements Screen {
     private World world;
     private Box2DDebugRenderer b2dr;
 
+    private Texture pauseIcon;
+    private Texture Tank1;
+    private Texture Tank2;
+    private Texture chooseIcon;
+    private Texture topHUD;
 
     public PlayScreens(tankStars game){
 
         this.game = game;
         gameCam = new OrthographicCamera();
-//        tank1 = new Texture("chooseTank1.png");
-//        tank2 = new Texture("chooseTank2.png");
-//        Tanks tanksOnGame = new Tanks(this);
+        tank1 = new Texture("images/Abramas.png");
+        tank2 = new Texture("images/rightHelios.png");
+        chooseIcon = new Texture("images/chooseIcon.png");
+        topHUD = new Texture("images/TopHUD.png");
         gamePort = new FitViewport(Gdx.graphics.getWidth(),Gdx.graphics.getHeight(),gameCam);
+
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("sprites/ground1.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
@@ -80,13 +87,9 @@ public class PlayScreens extends InputAdapter implements Screen {
         }
     }
 
-    public void handleInput(float dt){
-        if (Gdx.input.isTouched()){
-            gameCam.position.y += 100*dt;
-        }
-    }
+
     public void update(float dt){
-        handleInput(dt);
+//        handleInput(dt);
         world.step(1/60f, 6,2);
         gameCam.update();
         renderer.setView(gameCam);
@@ -106,16 +109,20 @@ public class PlayScreens extends InputAdapter implements Screen {
         renderer.render();
         game.batch.setProjectionMatrix(gameCam.combined);
 
-
+        game.batch.begin();
         b2dr.render(world, gameCam.combined);
+        game.batch.draw(chooseIcon, 20,Gdx.graphics.getHeight()-120,100,100);
 
+        if (Gdx.input.getX()<120 && Gdx.input.getX()>20 && Gdx.input.getY()<120 && Gdx.input.getY()>20){
+            if (Gdx.input.isTouched()){
+                game.setScreen(new PauseScreen(game));
+            }
+        }
+        game.batch.draw(topHUD,300,Gdx.graphics.getHeight()-160);
 
-//        game.batch.draw(tank2,(gamePort.g etWorldWidth()/2)+330,gamePort.getWorldWidth()/2-390);
-//        game.batch.end();
-//
-//        game.batch.begin();
-//        game.batch.draw(tank1,(gamePort.getWorldWidth()/2)+330,gamePort.getWorldWidth()/2-390);
-
+        game.batch.draw(tank1,400,320,230,150);
+        game.batch.draw(tank2,1090,325,230,150);
+        game.batch.end();
 
 //        gameCam.update();
 
